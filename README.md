@@ -1,4 +1,4 @@
-**_hadoop-spark-JobSchedeling_**
+### hadoop-spark-JobSchedeling  
 
 When running on a cluster, each Spark application (instance of SparkContext) gets an independent set of executor JVMs (with CPU and RAM) that only run tasks and store data for that application. Spark provides several facilities for scheduling resources between computations:
  - multiple applications / users can use your cluster simultaniously  
@@ -11,7 +11,7 @@ There are also different options to manage allocation accros application, depend
 
 In this post, I will show the different way to allocate ressources on Standalone mode.
 
-**_1-1 static partitioning of resources_**
+**_1-1 static partitioning of resources_**  
 **_1-1-1 Interactive mode_**
 
 ```sh
@@ -42,7 +42,7 @@ sc.stop()
 
 ```
 
-**_1-1-3 Scheduling for both interactive and application mode
+**_1-1-3 Scheduling for both interactive and application mode_**
 Change spark configuration file `spark-defaults.conf`
 
 ```sh
