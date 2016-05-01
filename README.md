@@ -12,6 +12,30 @@ There are also different options to manage allocation accros application, depend
 In this post, I will show the different way to allocate ressources on Standalone mode.
 
 ### 1-1 static partitioning of resources
+** Interactive mode**
+```sh
+# go to spark home
+cd spark-install
+./bin/pyspark --num-executors 1 --executor-memory 2G --total-executor-cores 2
+```
+
+** Application mode **
+Add these line on top of your .py file
+
+```python
+# -*- coding: utf-8 -*-
+import csv
+
+from pyspark import SparkConf, SparkContext
+
+
+appName = 'Spark demo App'
+master = 'spark://spark-cluster-m:7077'
+conf = SparkConf().setAppName(appName).setMaster(master)
+sc = SparkContext(conf=conf)
+
+```
+
 ### 1-2 Schedeling within an application
 
 ### 2- Schedeling within application
