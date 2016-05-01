@@ -42,7 +42,7 @@ sc.stop()
 
 ```
 
-**_1-1-3 Scheduling for both interactive and application mode_**
+**_1-1-3 Scheduling for both interactive and application mode_**  
 Change spark configuration file `spark-defaults.conf`
 
 ```sh
