@@ -1,1 +1,28 @@
 # hadoop-spark-JobSchedeling
+
+When running on a cluster, each Spark application (instance of SparkContext) gets an independent set of executor JVMs (with CPU and RAM) that only run tasks and store data for that application. Spark provides several facilities for scheduling resources between computations:
+- multiple applications / users can use your cluster simultaniously  
+- within each Spark application, multiple “jobs” (Spark actions) may be running concurrently  
+
+### 1- Schedeling accros application
+There are also different options to manage allocation accros application, depending on the cluster manager (YARN, Standalone and Mesos):
+- static partitioning of resources
+- dynamic ressources allocation
+
+In this post, I will show the different way to allocate ressources on Standalone mode.
+
+### 1-1 static partitioning of resources
+### 1-2 Schedeling within an application
+
+### 2- Schedeling within application
+### 2-1 FIFO schedeler
+### 2-2 FAIR schedeler
+### 2-2-1 FAIR schedeler
+### 2-2-2 FAIR pool schedeler
+
+
+ 
+```sh
+# Update package source
+sudo apt-get update
+```
