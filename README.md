@@ -1,4 +1,4 @@
-# hadoop-spark-JobSchedeling
+hadoop-spark-JobSchedeling
 
 When running on a cluster, each Spark application (instance of SparkContext) gets an independent set of executor JVMs (with CPU and RAM) that only run tasks and store data for that application. Spark provides several facilities for scheduling resources between computations:
  - multiple applications / users can use your cluster simultaniously  
