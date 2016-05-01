@@ -1,25 +1,25 @@
-hadoop-spark-JobSchedeling
+**_hadoop-spark-JobSchedeling_**
 
 When running on a cluster, each Spark application (instance of SparkContext) gets an independent set of executor JVMs (with CPU and RAM) that only run tasks and store data for that application. Spark provides several facilities for scheduling resources between computations:
  - multiple applications / users can use your cluster simultaniously  
  - within each Spark application, multiple “jobs” (Spark actions) may be running concurrently  
 
-### 1- Schedeling accros application
+**_1- Schedeling accros application_**  
 There are also different options to manage allocation accros application, depending on the cluster manager (YARN, Standalone and Mesos):
 - static partitioning of resources
 - dynamic ressources allocation
 
 In this post, I will show the different way to allocate ressources on Standalone mode.
 
-### 1-1 static partitioning of resources
-** Interactive mode**
+**_1-1 static partitioning of resources_**
+**_1-1-1 Interactive mode_**
 ```sh
 # go to spark home
 cd spark-install
 ./bin/pyspark --num-executors 1 --executor-memory 2G --total-executor-cores 2
 ```
 
-** Application mode **
+**_1-1-2 Application mode_**
 Add these line on top of your .py file
 
 ```python
@@ -36,13 +36,13 @@ sc = SparkContext(conf=conf)
 
 ```
 
-### 1-2 Schedeling within an application
+**_1-2 Schedeling within an application_**
 
-### 2- Schedeling within application
-### 2-1 FIFO schedeler
-### 2-2 FAIR schedeler
-### 2-2-1 FAIR schedeler
-### 2-2-2 FAIR pool schedeler
+**_2- Schedeling within application_**
+**_2-1 FIFO schedeler_**
+**_2-2 FAIR schedeler_**
+**_2-2-1 FAIR schedeler_**
+**_2-2-2 FAIR pool schedeler_**
 
 
  
