@@ -61,6 +61,52 @@ spark.cores.max 1
 
 
 **_1-2 Dynamic Resource Allocation_**
+application may give resources back to the cluster if they are no longer used and request them again later when there is demand. This feature is particularly useful if multiple applications share resources in your Spark cluster. If a subset of the resources allocated to an application becomes idle, it can be returned to the cluster’s pool of resources and acquired by other applications
+
+```python
+# -*- coding: utf-8 -*-
+import time
+
+from pyspark import SparkConf, SparkContext
+
+appName = 'Dynamic allocation'
+Master = 'spark://spark-cluster-m:7077'
+conf = SparkConf().setAppName(appName).setMaster(Master)
+conf.set("spark.shuffle.service.enabled", "true")
+conf.set("spark.dynamicAllocation.enabled", "true")
+conf.set("spark.dynamicAllocation.executorIdleTimeout", "60s")
+conf.set("spark.dynamicAllocation.cachedExecutorIdleTimeout", "60s")
+conf.set("spark.dynamicAllocation.initialExecutors", "2")
+conf.set("spark.dynamicAllocation.maxExecutors", "2")
+conf.set("spark.dynamicAllocation.minExecutors", "0")
+conf.set("spark.dynamicAllocation.schedulerBacklogTimeout", "30s")
+
+sc = SparkContext(conf=conf)
+
+# Run spark application during 60 seconds
+time.sleep(120)
+
+sc.stop()
+
+```
+
+**_1-2-2 Scheduling for both interactive and application mode_**  
+Change spark configuration file `spark-defaults.conf`
+
+```sh
+cd /home/hadoop/spark-install/conf
+sudo nano spark-defaults.conf
+```
+
+Change properties here
+spark.shuffle.service.enabled true 
+spark.dynamicAllocation.enabled true 
+spark.dynamicAllocation.executorIdleTimeout 30s
+spark.dynamicAllocation.cachedExecutorIdleTimeout 30s 
+spark.dynamicAllocation.initialExecutors 2 
+spark.dynamicAllocation.maxExecutors 2 
+spark.dynamicAllocation.minExecutors 0 
+spark.dynamicAllocation.schedulerBacklogTimeout 30s
 
 **_2- Schedeling within application_**
 **_2-1 FIFO schedeler_**
