@@ -108,11 +108,15 @@ spark.dynamicAllocation.maxExecutors 2
 spark.dynamicAllocation.minExecutors 0 
 spark.dynamicAllocation.schedulerBacklogTimeout 30s
 
-**_2- Schedeling within application_**
-**_2-1 FIFO schedeler_**
-**_2-2 FAIR schedeler_**
-**_2-2-1 FAIR schedeler_**
-**_2-2-2 FAIR pool schedeler_**
+**_2- Schedeling within application_** 
+Inside a given Spark application (SparkContext instance), multiple parallel jobs can run simultaneously if they were submitted from separate threads. By “job”, in this section, we mean a Spark action (e.g. save, collect) and any tasks that need to run to evaluate that action. Spark’s scheduler is fully thread-safe and supports this use case to enable applications that serve multiple requests (e.g. queries for multiple users).
+
+By default, Spark’s scheduler runs jobs in FIFO fashion. Each job is divided into “stages” (e.g. map and reduce phases), and the first job gets priority on all available resources while its stages have tasks to launch, then the second job gets priority, etc. If the jobs at the head of the queue don’t need to use the whole cluster, later jobs can start to run right away, but if the jobs at the head of the queue are large, then later jobs may be delayed significantly.
+
+**_2-1 FIFO schedeler_**  
+**_2-2 FAIR schedeler_**  
+**_2-2-1 FAIR schedeler_**  
+**_2-2-2 FAIR pool schedeler_**  
 
 
  
