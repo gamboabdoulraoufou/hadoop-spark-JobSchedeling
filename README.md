@@ -108,15 +108,49 @@ spark.dynamicAllocation.maxExecutors 2
 spark.dynamicAllocation.minExecutors 0 
 spark.dynamicAllocation.schedulerBacklogTimeout 30s
 
-**_2- Schedeling within application_** 
+**_2- Schedeling within application_**  
 Inside a given Spark application (SparkContext instance), multiple parallel jobs can run simultaneously if they were submitted from separate threads. By “job”, in this section, we mean a Spark action (e.g. save, collect) and any tasks that need to run to evaluate that action. Spark’s scheduler is fully thread-safe and supports this use case to enable applications that serve multiple requests (e.g. queries for multiple users).
 
 By default, Spark’s scheduler runs jobs in FIFO fashion. Each job is divided into “stages” (e.g. map and reduce phases), and the first job gets priority on all available resources while its stages have tasks to launch, then the second job gets priority, etc. If the jobs at the head of the queue don’t need to use the whole cluster, later jobs can start to run right away, but if the jobs at the head of the queue are large, then later jobs may be delayed significantly.
 
 **_2-1 FIFO schedeler_**  
+conf.set("spark.scheduler.mode", "FIFO")
+
 **_2-2 FAIR schedeler_**  
+conf.set("spark.scheduler.mode", "FAIR")
+
 **_2-2-1 FAIR schedeler_**  
 **_2-2-2 FAIR pool schedeler_**  
+sc.setLocalProperty("spark.scheduler.pool", "pool1")
+
+Default Behavior of Pools
+By default, each pool gets an equal share of the cluster (also equal in share to each job in the default pool), but inside each pool, jobs run in FIFO order. For example, if you create one pool per user, this means that each user will get an equal share of the cluster, and that each user’s queries will run in order instead of later queries taking resources from that user’s earlier ones.
+
+Configuring Pool Properties
+Specific pools’ properties can also be modified through a configuration file. Each pool supports three properties:
+
+schedulingMode: This can be FIFO or FAIR, to control whether jobs within the pool queue up behind each other (the default) or share the pool’s resources fairly.
+weight: This controls the pool’s share of the cluster relative to other pools. By default, all pools have a weight of 1. If you give a specific pool a weight of 2, for example, it will get 2x more resources as other active pools. Setting a high weight such as 1000 also makes it possible to implement priority between pools—in essence, the weight-1000 pool will always get to launch tasks first whenever it has jobs active.
+minShare: Apart from an overall weight, each pool can be given a minimum shares (as a number of CPU cores) that the administrator would like it to have. The fair scheduler always attempts to meet all active pools’ minimum shares before redistributing extra resources according to the weights. The minShare property can therefore be another way to ensure that a pool can always get up to a certain number of resources (e.g. 10 cores) quickly without giving it a high priority for the rest of the cluster. By default, each pool’s minShare is 0.
+The pool properties can be set by creating an XML file, similar to conf/fairscheduler.xml.template, and setting a spark.scheduler.allocation.file property in your SparkConf.
+
+conf.set("spark.scheduler.allocation.file", "/path/to/file")
+
+<?xml version="1.0"?>
+<allocations>
+  <pool name="production">
+    <schedulingMode>FAIR</schedulingMode>
+    <weight>1</weight>
+    <minShare>2</minShare>
+  </pool>
+  <pool name="test">
+    <schedulingMode>FIFO</schedulingMode>
+    <weight>2</weight>
+    <minShare>3</minShare>
+  </pool>
+</allocations>
+
+A full example is also available in conf/fairscheduler.xml.template. Note that any pools not configured in the XML file will simply get default values for all settings (scheduling mode FIFO, weight 1, and minShare 0).
 
 
  
